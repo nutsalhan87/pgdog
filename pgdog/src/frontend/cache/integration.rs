@@ -45,8 +45,7 @@ impl Cache {
 
         // Detect read-only status via the AST parser's route classification.
         // When caching is enabled, the query parser is auto-enabled.
-        let is_read = route.is_read();
-        if !is_read {
+        if !route.is_read() {
             return Ok(CacheCheckResult::Passthrough);
         }
 

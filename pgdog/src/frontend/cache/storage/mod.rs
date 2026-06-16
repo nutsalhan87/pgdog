@@ -13,7 +13,7 @@ pub enum Error {
     RedisError {
         cmd: &'static str,
         key: u64,
-        err: fred::error::RedisError,
+        err: fred::error::Error,
     },
     #[error("Connection failed: {0}")]
     ConnectionFailed(&'static str),

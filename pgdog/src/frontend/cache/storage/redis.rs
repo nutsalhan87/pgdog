@@ -22,7 +22,7 @@ const MAX_REDIS_RECONNECTION_PERIOD: Duration = Duration::from_secs(5);
 ///
 /// At most one reconnect task runs at any time, enforced by a CAS on `reconnecting`.
 pub struct RedisCacheStorage {
-    client: RedisClient,
+    client: Client,
     /// Redis url (only for update tracking).
     url: String,
     /// Guards against spawning multiple concurrent reconnect tasks.
@@ -42,7 +42,7 @@ impl RedisCacheStorage {
     /// Build a new storage instance for `url` and immediately start a background
     /// connection task.  Returns `None` when the URL cannot be parsed.
     pub async fn new(config: &CacheConfig) -> Option<Self> {
-        let client_config = match RedisConfig::from_url(&config.redis.url) {
+        let client_config = match Config::from_url(&config.redis.url) {
             Ok(c) => c,
             Err(e) => {
                 error!("Failed to parse Redis URL '{}': {}", config.redis.url, e);
@@ -157,7 +157,7 @@ impl CacheStorage for RedisCacheStorage {
         let operation_timeout = config.redis.operation_timeout.get();
         let redis_result = tokio::time::timeout(
             Duration::from_millis(operation_timeout),
-            self.client.get::<RedisValue, _>(full_key),
+            self.client.get::<Value, _>(full_key),
         )
         .await;
         let val = match redis_result {

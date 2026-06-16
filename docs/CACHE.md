@@ -63,7 +63,7 @@ operation_timeout = 2000
 ### Dependencies
 
 ```toml
-fred = { version = "9", features = ["enable-rustls"] }
+fred = { version = "10", features = ["enable-rustls"] }
 xxhash-rust = { version = "0.8", features = ["xxh3"] }
 ```
 
